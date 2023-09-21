@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Minecraft Classic</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Define block size and grid dimensions
+        const blockSize = 40;
+        const gridWidth = canvas.width / blockSize;
+        const gridHeight = canvas.height / blockSize;
+
+        // Create a grid to represent the world
+        const worldGrid = [];
+        for (let x = 0; x < gridWidth; x++) {
+            worldGrid[x] = [];
+            for (let y = 0; y < gridHeight; y++) {
+                worldGrid[x][y] = Math.random() < 0.3 ? 1 : 0; // Random blocks
+            }
+        }
+
+        // Render the world
+        function renderWorld() {
+            for (let x = 0; x < gridWidth; x++) {
+                for (let y = 0; y < gridHeight; y++) {
+                    const blockType = worldGrid[x][y];
+                    ctx.fillStyle = blockType === 1 ? '#555' : '#fff'; // Color for blocks
+                    ctx.fillRect(x * blockSize, y * blockSize, blockSize, blockSize);
+                }
+            }
+        }
+
+        // Handle mouse click to place/remove blocks
+        canvas.addEventListener('mousedown', function (e) {
+            const x = Math.floor(e.offsetX / blockSize);
+            const y = Math.floor(e.offsetY / blockSize);
+            
+            if (worldGrid[x] && worldGrid[x][y] !== undefined) {
+                worldGrid[x][y] = 1 - worldGrid[x][y]; // Toggle block state
+                renderWorld();
+            }
+        });
+
+        // Initial rendering of the world
+        renderWorld();
+    </script>
+</body>
+</html>
